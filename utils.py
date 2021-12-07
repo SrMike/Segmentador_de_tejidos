@@ -4,6 +4,109 @@ Created on Wed Aug 11 18:03:26 2021
 
 @author: Miguel
 """
+#======================Función segmentar========================================================
+
+#=====================utils gui ================================================================
+import os
+import pydicom as pdicom
+import nibabel as nib
+import numpy as np
+
+
+def info_dicom(path):
+    CT_images = os.listdir(path)
+
+    slices = [pdicom.read_file(path + '/' + s, force = True) for s in CT_images]
+
+    slices = sorted(slices, key = lambda x:x.ImagePositionPatient[2])
+    image_shape = list(slices[0].pixel_array.shape)
+    image_shape.append(len(slices))
+    volume3d = np.zeros(image_shape, dtype = np.float64)
+
+    for i, s in enumerate(slices):
+        image2d = s.pixel_array 
+        volume3d[:, :, i] = image2d
+    
+    info = pdicom.dcmread(path + '/' + CT_images[0])
+    
+    pixel_spacing = info.PixelSpacing
+    pixel_spacing.append(info.SliceThickness)
+    modality = info.Modality
+
+    volume3d = volume3d + abs(volume3d.min())
+    volume3d = volume3d / volume3d.max()
+
+    return volume3d, pixel_spacing, modality
+
+def info_nibabel(path):
+    info  = nib.load(path)
+    volumen = info.get_fdata()
+    pixel_spacing = info.header['pixdim'][1:4]
+    volumen = volumen + abs(volumen.min())
+    volumen = volumen / volumen.max()
+    return volumen, pixel_spacing 
+
+
+class pasiente():
+    def __init__(self,path, is_dicom):
+        self.path = path
+        if is_dicom:
+            self.volumen = from_dicom_to_3d(self.path)
+            self.shape = self.volumen.shape
+            self.info = pdicom.dcmread(self.path + '/' + os.listdir(path)[0])
+            
+            self.disxpix = self.info.PixelSpacing
+
+            self.edad = self.info.PatientAge
+            self.sexo = self.info.PatientSex
+            self.Modality = self.info.Modality
+            self.max_value = self.info.LargestImagePixelValue
+            self.min_value = self.info.SmallestImagePixelValue
+            self.equipo = self.info.ManufacturerModelName
+
+        else: 
+            self.nii = nib.load(self.path)
+            self.volumen = self.nii.get_fdata()
+            self.shape = self.volumen.shape
+            
+            
+            
+
+            
+
+
+
+def from_dicom_to_3d(path):
+    CT_images = os.listdir(path)
+
+    slices = [pdicom.read_file(path + '/' + s, force = True) for s in CT_images]
+
+    slices = sorted(slices, key = lambda x:x.ImagePositionPatient[2])
+    image_shape = list(slices[0].pixel_array.shape)
+    image_shape.append(len(slices))
+    volume3d = np.zeros(image_shape, dtype = np.float32)
+
+    for i, s in enumerate(slices):
+        image2d = s.pixel_array
+        volume3d[:, :, i] = image2d
+    
+
+    return volume3d
+
+if __name__=='__main__':
+    DICOM_PATH = 'datos/PAT034'
+    NII_PATH = 'datos/2 Bone cropped.nii'
+    escaner_1 = pasiente(DICOM_PATH, True)
+    #escaner_2  =pasiente(NII_PATH, False)
+    #print(escaner_1.shape)
+    #print(escaner_2.shape)
+    #print('Funciones especiales')
+    #print(info_dicom(DICOM_PATH))
+    #print(info_nibabel(NII_PATH))
+    info = info_nibabel(NII_PATH)
+    print(info[0][:,:,0].shape)
+
+#===================================================================================================
 import torch
 import torchvision
 from basededatos import LiTS 

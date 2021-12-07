@@ -115,14 +115,19 @@ class Window(QMainWindow):
 
         menu_archivo_abrir_dicom.triggered.connect(self.abrir_dicom)
         menu_archivo.addAction(menu_archivo_abrir_dicom)
-        #=======================Botones del bloque 'Cargar datos' ===============================
-        self.pushNibabelabrir.clicked.connect(self.abrir_nibabel)
-        self.pushDicomabrir.clicked.connect(self.abrir_dicom)
         #======================================Scroll Bars =====================================
         self.scrollbarAxial.valueChanged.connect(self.up_ima)
         self.scrollbarCoronal.valueChanged.connect(self.up_ima)
         self.scrollbarSagital.valueChanged.connect(self.up_ima)
-        #=============================Botones del bloque Region de Interes'=============
+        #======================================Canvas ==========================================
+        self.canvas_inicio()
+        #============================================Tab 1======================================
+        #=======================================================================================
+        #=======================Botones del bloque 'Cargar datos' ==============================
+        self.pushNibabelabrir.clicked.connect(self.abrir_nibabel)
+        self.pushDicomabrir.clicked.connect(self.abrir_dicom)
+        
+        #=============================Botones del bloque Region de Interes'=====================
         
         self.pushCrea.clicked.connect(self.crea_rdi)
         
@@ -134,18 +139,21 @@ class Window(QMainWindow):
         self.pushDerecha.clicked.connect(self.derecha_rdi)
         self.pushIzquierda.clicked.connect(self.izquierda_rdi)
         self.pushAceptar.clicked.connect(self.aceptar_rdi)
-
+        #======================================================Tab 2============================
+        #=======================================================================================
+        #self.pushSegmentar.clicked.connect(self.segmentar_rdi)
         
-        #======================================Canvas ==========================================
-        self.canvas_inicio()
-
+        
 
 
         
 
         
         self.showMaximized()
-
+#=======================Funciones Segmentar RDI (Región de Interes)=============================
+    def segmentar_rdi(self):
+        segmentado = segmentador(self.volumen)
+        return 0
 #=======================Funciones Seleccionar RDI (Region de Interes)===========================
     def borra_rdi(self):
         self.axial.drop_rectangulo()

@@ -7,7 +7,7 @@ Created on Wed Aug 11 18:05:58 2021
 
 import os
 from PIL import Image
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, dataset
 import numpy as np
 import nibabel as nib
 from tqdm import tqdm, notebook
@@ -18,7 +18,7 @@ class LiTS(Dataset):
       self.mask_dir = mask_dir   # directorio de las mascaras en formato string
       self.transform = transform
       self.class_dimention = class_dimention
-      self.index_array = np.zeros([0,0])
+      self.index_array = np.zeros([0,0])  
 
       if 'index_array' in os.listdir(image_dir):
         print('Cargando indices... ')
@@ -141,3 +141,11 @@ class LiTS(Dataset):
       for i in range(min(dic),max(dic)):
         lista.append(dic[i])
       return lista
+#Coment
+class nuevo_tejido(Dataset):
+  def __init__(self, arreglo):
+    self.datos = arreglo
+  def __len__(self):
+    return self.index_array.shape[0]
+  def __getitem__(self, index):
+    return
