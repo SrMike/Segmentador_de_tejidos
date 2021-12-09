@@ -152,7 +152,7 @@ class Window(QMainWindow):
         self.showMaximized()
 #=======================Funciones Segmentar RDI (Región de Interes)=============================
     def segmentar_rdi(self):
-        segmentado = segmentador(self.volumen)
+        #segmentado = segmentador(self.volumen)
         return 0
 #=======================Funciones Seleccionar RDI (Region de Interes)===========================
     def borra_rdi(self):
