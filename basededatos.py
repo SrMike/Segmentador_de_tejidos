@@ -12,6 +12,20 @@ import numpy as np
 import nibabel as nib
 from tqdm import tqdm, notebook
 import torch
+
+#=======Clase data===============================================
+#=Se utiliza en la gui para cargar el self.volumen
+#= recibe 'datos = info_{dicom,nibabel}(/ruta/)[0]'
+#=no contiene mascaras
+class data(Dataset):
+  def __init__(self,datos):
+    self.datos = datos
+  def __len__(self):
+    return self.datos.shape[2]
+  def __getitem__(self,index):
+    return self.datos[:,:,index]
+
+#===============================================================
 class LiTS(Dataset):
     def __init__(self, image_dir, mask_dir, transform=None, class_dimention = False):
       self.image_dir = image_dir # directorio de los volumenes en formato string
