@@ -4,13 +4,28 @@ Created on Wed Aug 11 18:03:26 2021
 
 @author: Miguel
 """
-#======================Función segmentar========================================================
-
-#=====================utils gui ================================================================
 import os
 import pydicom as pdicom
 import nibabel as nib
 import numpy as np
+import torch
+import torchvision
+from basededatos import LiTS 
+from torch.utils.data import DataLoader
+import time as t
+import pandas as pd
+from tqdm import tqdm, notebook
+import numpy as np
+
+#============Función kernel================================
+#=Debe model_obj y data_obj son instancias de model y data
+def kernel(model_obj, data_obj):
+  r = np.zeros_like(data_obj.datos)
+  for i in range(data_obj.__len__()):
+    r[:,:,i] = model_obj(data_obj.getitem(i)).detach().numpy()[0,0,:,:]
+  return r
+
+#=====================utils gui ================================================================
 
 
 def info_dicom(path):
@@ -107,14 +122,7 @@ if __name__=='__main__':
     print(info[0][:,:,0].shape)
 
 #===================================================================================================
-import torch
-import torchvision
-from basededatos import LiTS 
-from torch.utils.data import DataLoader
-import time as t
-import pandas as pd
-from tqdm import tqdm, notebook
-import numpy as np
+
 
 t.strftime("%H:%M:%S")
 def fecha():
