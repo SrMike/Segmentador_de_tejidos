@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>983</width>
+    <width>987</width>
     <height>781</height>
    </rect>
   </property>
@@ -691,7 +691,7 @@
         <property name="title">
          <string>Red Neuronal</string>
         </property>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="pushSegmentar">
          <property name="geometry">
           <rect>
            <x>0</x>
@@ -728,7 +728,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>983</width>
+     <width>987</width>
      <height>21</height>
     </rect>
    </property>

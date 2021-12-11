@@ -9,6 +9,7 @@ from PyQt5.QtGui import QIcon
 import sys 
 import numpy as np
 import matplotlib.pyplot as plt
+from model import *
 import matplotlib.patches as patches
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5 import NavigationToolbar2QT as NavigationToolbar
@@ -24,6 +25,7 @@ import ctypes
 
 import os
 from utils import *
+from basededatos import datas
 
 try:
   import skimage
@@ -141,7 +143,7 @@ class Window(QMainWindow):
         self.pushAceptar.clicked.connect(self.aceptar_rdi)
         #======================================================Tab 2============================
         #=======================================================================================
-        #self.pushSegmentar.clicked.connect(self.segmentar_rdi)
+        self.pushSegmentar.clicked.connect(self.segmentar_rdi)
         
         
 
@@ -152,8 +154,7 @@ class Window(QMainWindow):
         self.showMaximized()
 #=======================Funciones Segmentar RDI (Región de Interes)=============================
     def segmentar_rdi(self):
-        #segmentado = segmentador(self.volumen)
-        return 0
+        self.seg = kernel(UNET(1,1),datas(self.volumen.copy()))
 #=======================Funciones Seleccionar RDI (Region de Interes)===========================
     def borra_rdi(self):
         self.axial.drop_rectangulo()
@@ -390,6 +391,7 @@ class Window(QMainWindow):
         #=================Desbloquea el bloque de botones y lineas 'Seleccionar RDI'==============
         self.init_bloqueRDI()
         #==================Actualiza los Canvas===================================================
+        print(self.volumen.shape)
         self.up_ima()
 
     def abrir_dicom(self):

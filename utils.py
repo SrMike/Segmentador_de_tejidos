@@ -19,12 +19,12 @@ import numpy as np
 
 #============Función kernel================================
 #=Debe model_obj y data_obj son instancias de model y data
+
 def kernel(model_obj, data_obj):
   r = np.zeros_like(data_obj.datos)
   for i in range(data_obj.__len__()):
     r[:,:,i] = model_obj(data_obj.getitem(i)).detach().numpy()[0,0,:,:]
   return r
-
 #=====================utils gui ================================================================
 
 
