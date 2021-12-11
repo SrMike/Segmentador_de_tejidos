@@ -25,7 +25,7 @@ class datas(Dataset):
   def __getitem__(self,index):
     return self.datos[:,:,index]
   def getitem(self,index):
-    print("tamaño: ", self.datos.shape)
+    #print("tamaño: ", self.datos.shape)
     return torch.from_numpy(self.datos[:,:,index]).float().unsqueeze_(0).unsqueeze_(0)
 
 

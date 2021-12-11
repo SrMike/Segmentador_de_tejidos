@@ -20,10 +20,13 @@ import numpy as np
 #============Función kernel================================
 #=Debe model_obj y data_obj son instancias de model y data
 
-def kernel(model_obj, data_obj):
+def kernel(model_obj, data_obj, bar):
   r = np.zeros_like(data_obj.datos)
-  for i in range(data_obj.__len__()):
+  bar.setMaximum(data_obj.__len__()-1)
+  for i in tqdm(range(data_obj.__len__())):
+    bar.setValue(i)
     r[:,:,i] = model_obj(data_obj.getitem(i)).detach().numpy()[0,0,:,:]
+    #print(i)
   return r
 #=====================utils gui ================================================================
 
@@ -119,7 +122,7 @@ if __name__=='__main__':
     #print(info_dicom(DICOM_PATH))
     #print(info_nibabel(NII_PATH))
     info = info_nibabel(NII_PATH)
-    print(info[0][:,:,0].shape)
+    #print(info[0][:,:,0].shape)
 
 #===================================================================================================
 

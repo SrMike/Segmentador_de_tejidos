@@ -154,7 +154,7 @@ class Window(QMainWindow):
         self.showMaximized()
 #=======================Funciones Segmentar RDI (Región de Interes)=============================
     def segmentar_rdi(self):
-        self.seg = kernel(UNET(1,1),datas(self.volumen.copy()))
+        self.seg = kernel(UNET(1,1),datas(self.volumen.copy()),self.progressBar)
 #=======================Funciones Seleccionar RDI (Region de Interes)===========================
     def borra_rdi(self):
         self.axial.drop_rectangulo()
@@ -391,7 +391,6 @@ class Window(QMainWindow):
         #=================Desbloquea el bloque de botones y lineas 'Seleccionar RDI'==============
         self.init_bloqueRDI()
         #==================Actualiza los Canvas===================================================
-        print(self.volumen.shape)
         self.up_ima()
 
     def abrir_dicom(self):
