@@ -71,7 +71,7 @@ def train_fn(loader, model, optimizer, loss_fn, scaler,info):
     loop = notebook.tqdm(loader, desc = '=> Entrenando', leave = False)
    
     for batch_idx, (data, targets) in enumerate(loop):
-        
+        data = data.float()
         data = data.to(device=DEVICE)
         targets = targets.to(device=DEVICE)
         # forward
@@ -118,7 +118,7 @@ def main():
         ],
     )
     if mode == "UNET":
-      model = UNET(in_channels=3, out_channels=3).to(DEVICE)
+      model = UNET(in_channels=3, out_channels=4).to(DEVICE)
     elif mode == "TC_UNET":
       model = TC_UNET(in_channels=3, out_channels=3).to(DEVICE)
     elif mode == "SEGNET":

@@ -85,6 +85,14 @@ class datas_train(Dataset):
         return self.index_array.shape[0]-1
 
     def __getitem__(self, index):
+      #print(index)
+      if (index == 0):
+        index = 1
+      if (index == 64):
+        index = 63
+      if (index == 238):
+        index = 237
+        
       nlist,idx = np.int16(self.index_array[index])
       image = self.list_images[nlist].slicer[:,:,idx-1:idx+2].get_fdata()
       mask = self.list_mask[nlist].slicer[:,:,idx:idx+1].get_fdata()
