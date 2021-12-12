@@ -15,7 +15,7 @@ from torch.utils.data import DataLoader
 import time as t
 import pandas as pd
 from tqdm import tqdm, notebook
-import numpy as np
+
 
 #============Función kernel================================
 #=Debe model_obj y data_obj son instancias de model y data
