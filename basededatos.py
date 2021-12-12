@@ -100,7 +100,7 @@ class datas_train(Dataset):
       #image = (image/image.max())*255
       #image = np.uint8(image)
       #image = image[:,:,0]
-
+      #mask = mask + 1
       if self.class_dimention:
 
         mat = np.zeros((mask.shape[0], mask.shape[1],2))

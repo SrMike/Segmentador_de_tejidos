@@ -284,6 +284,33 @@ def gen_dim_clases(target,clases):
 #    n_pred = np.sum(prediction[:,i,:,:])+ 1e-8
 #    acc[i] = (n_pred/n_correct)*100
 #  return acc
+def check_accuracy_2(loader, model, info, device="cuda"):
+    model.eval()
+    with torch.no_grad():
+        c = 0
+        loader = notebook.tqdm(loader,desc= '=> Checking accurrancy')
+        
+        for x, y in loader:
+            inicio =t.time()
+            c = c+1
+            
+            x = x.to(device)
+            y = y.to(device)
+            
+            
+            preds = torch.sigmoid(model(x))
+            preds = (preds > 0.5).float()
+            
+            dice = dice_score(y, preds)
+            ji = jaccard_index(y,preds)
+            for i in range(len(dice)):
+              dice[i] = dice[i].detach().cpu().numpy()
+              ji[i] = ji[i].detach().cpu().numpy()
+    
+            info.agrega(-1, (dice[0],dice[1],dice[2],dice[3]), (ji[0],ji[1],ji[2],ji[3]))
+
+
+
 def check_accuracy(loader, model, info, device="cuda"):
     
     num_correct_1 = 0
@@ -372,13 +399,14 @@ class informe():
         self.id_val = self.frame['VAL'].max()
         
     else:
-      dic = {'ID':[], 'FECHA':[], 'LOSS':[],'LR':[],'DICE_0':[], 'DICE_1':[], 'JI_0':[], 'JI_1':[],'VAL':[]}
+      dic = {'ID':[], 'FECHA':[], 'LOSS':[],'LR':[],'DICE_0':[], 'DICE_1':[],'DICE_2':[],'DICE_3':[], 'JI_0':[], 'JI_1':[],'JI_2':[],'JI_3':[],'VAL':[]}
       frame = pd.DataFrame(dic)
       frame.to_csv(self.training_data_file, header = True, index = False)
       print('Creando: '+ self.nombre)
       self.frame = pd.read_csv(self.training_data_file)
       print('\b Listo!')
   def agrega(self, loss, dice, acc, lr = 'same'):
+    #print(len(dice))
     if (lr == 'same'): lr = self.lr
     self.id = self.id + 1
     if (loss == -1)and(self.frame[self.frame['ID'] == self.id-1].LOSS.values[0] != -1):
@@ -386,8 +414,7 @@ class informe():
       self.val = self.id_val
     elif (loss != -1):
       self.val = 0
-    print(len(dice))
-    dic = {'ID':self.id, 'FECHA':fecha(), 'LOSS':loss,'LR':lr,'DICE_0':dice[0], 'DICE_1':dice[1], 'JI_0':acc[0], 'JI_1':acc[1],'VAL':self.val}
+    dic = {'ID':self.id, 'FECHA':fecha(), 'LOSS':loss,'LR':lr,'DICE_0':dice[0], 'DICE_1':dice[1],'DICE_2':dice[2],'DICE_3':dice[3], 'JI_0':acc[0], 'JI_1':acc[1],'JI_2':acc[2],'JI_3':acc[3],'VAL':self.val}
     self.frame = self.frame.append(dic, ignore_index = True)
     
     if (loss == -1): 
@@ -409,7 +436,7 @@ class informe():
       model.load_state_dict(checkpoint["state_dict"])
     except FileNotFoundError:
       print('El modelo se entrenará desde 0 ')
-    
+
   def guarda_graficas(self):
     return 0
   def genera_graficas(self):

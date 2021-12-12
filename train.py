@@ -21,6 +21,7 @@ from utils import (
     save_checkpoint,
     get_loaders,
     check_accuracy,
+    check_accuracy_2,
     save_predictions_as_imgs,
     generador_nombre,
     informe,
@@ -36,7 +37,7 @@ NUM_WORKERS = 2
 IMAGE_HEIGHT = 448  # 
 IMAGE_WIDTH =  448  # 
 PIN_MEMORY = True
-LOAD_MODEL = True
+LOAD_MODEL = False
 
 TRAIN_IMG_DIR = "/content/datos/vol"
 TRAIN_MASK_DIR= "/content/datos/seg"
@@ -78,10 +79,12 @@ def train_fn(loader, model, optimizer, loss_fn, scaler,info):
         with torch.cuda.amp.autocast():
             
             predictions = model(data)
-
+            #print('predictions max : ', predictions.max())
+            #print('target max : ', targets.max())
+            #print('target shape: ',targets.shape,'predictions shape: ',predictions.shape)
             loss = loss_fn(predictions.float(), targets)
-            
-            info.agrega(loss.detach().cpu().numpy(), (0,0), (0,0))
+
+            info.agrega(loss.detach().cpu().numpy(), (0,0,0,0), (0,0,0,0))
         # backward
         optimizer.zero_grad()
         scaler.scale(loss).backward()
@@ -159,8 +162,8 @@ def main():
       info.checkpoint(model, optimizer)
       
       # check accuracy
-    check_accuracy(val_loader, model, info, device=DEVICE)
-
+    #check_accuracy(val_loader, model, info, device=DEVICE)
+    check_accuracy_2(val_loader, model, info, device=DEVICE)
       # print some examples to a folder
       #save_predictions_as_imgs(
       #    val_loader, model, folder="saved_images/", device=DEVICE    
