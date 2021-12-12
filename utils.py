@@ -386,7 +386,7 @@ class informe():
       self.val = self.id_val
     elif (loss != -1):
       self.val = 0
-    print(dice.shape)
+    print(len(dice))
     dic = {'ID':self.id, 'FECHA':fecha(), 'LOSS':loss,'LR':lr,'DICE_0':dice[0], 'DICE_1':dice[1], 'JI_0':acc[0], 'JI_1':acc[1],'VAL':self.val}
     self.frame = self.frame.append(dic, ignore_index = True)
     
