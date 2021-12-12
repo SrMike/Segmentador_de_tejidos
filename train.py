@@ -12,7 +12,7 @@ from tqdm import tnrange, notebook, tqdm
 import torch.nn as nn
 import torch.optim as optim
 import pandas as pd
-from basededatos import LiTS
+from basededatos import LiTS, datas_train
 import time as t
 
 from model import UNET, TC_UNET, SEGNET

@@ -10,7 +10,7 @@ import nibabel as nib
 import numpy as np
 import torch
 import torchvision
-from basededatos import LiTS 
+from basededatos import LiTS, datas_train
 from torch.utils.data import DataLoader
 import time as t
 import pandas as pd
@@ -156,7 +156,7 @@ def get_loaders(
     num_workers=4,
     pin_memory=True,
 ):
-    train_ds = LiTS(     
+    train_ds = datas_train(     
         image_dir=train_dir,
         mask_dir=train_maskdir,
         transform=train_transform,
@@ -171,7 +171,7 @@ def get_loaders(
         
     )
 
-    val_ds = LiTS(   
+    val_ds = datas_train(   
         image_dir=val_dir,
         mask_dir=val_maskdir,
         transform=val_transform,

@@ -68,9 +68,7 @@ class datas_train(Dataset):
         self.cont = 0
 
         for i in notebook.tqdm(range(len(self.tamaños)), desc= '=> Cargando base de datos', leave = False):
-          print('i: ', i)
           for j in notebook.tqdm(range(self.tamaños[i]), desc = '=> '+self.images[i], leave = False):
-            print('j: ', j)
             if self.list_mask[i].slicer[:,:,j:j+1].get_fdata().sum() != 0:
               self.index_array[self.cont,0] = i
               self.index_array[self.cont,1] = j
@@ -84,7 +82,7 @@ class datas_train(Dataset):
         
 
     def __len__(self):
-        return self.index_array.shape[0]
+        return self.index_array.shape[0]-1
 
     def __getitem__(self, index):
       nlist,idx = np.int16(self.index_array[index])
@@ -145,6 +143,7 @@ class datas_train(Dataset):
       # Esta función ordena de menor a mayor los nombres en formato string 
       # contenidos en la lista de entrada
       dic = {}
+      print(lista)
       lista.remove('.ipynb_checkpoints')
       #print(lista)
       for i in lista:
