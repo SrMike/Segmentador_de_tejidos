@@ -154,13 +154,19 @@ class Window(QMainWindow):
         self.showMaximized()
 #=======================Funciones Segmentar RDI (Región de Interes)=============================
     def segmentar_rdi(self):
-        self.seg = kernel(UNET(1,1),datas(self.volumen.copy()),self.progressBar)
+        PATH = 'G:\\Google Drive\\SOFTWARE_TT\\Seg_App\\UNET_INR_448x448_16_AD_ADAM_4C.pth.tar'
+        mod = UNET(3,4)
+        mod.load_state_dict(torch.load(PATH,map_location=torch.device('cpu'))["state_dict"])
+        self.seg = kernel(mod,datas(self.volumen.copy()),self.progressBar)
+        self.labelShapesalida.setText(str(self.seg.shape))
+        salvar_resultados(self.volumen, self.affine, nomb = 'entrada')
+        salvar_resultados(self.seg,self.affine)
 #=======================Funciones Seleccionar RDI (Region de Interes)===========================
-    def borra_rdi(self):
+    def borra_rdi(self):   
         self.axial.drop_rectangulo()
         self.coronal.drop_rectangulo()
         self.sagital.drop_rectangulo()
-        self.groupRDI.setEnabled(False)
+        self.groupRDI.setEnabled(False)      
 
     def aceptar_rdi(self):
         a = self.RDIpunto[0]
@@ -422,7 +428,7 @@ class Window(QMainWindow):
             self.filename = filename
             self.labelRuta.setText(self.filename)
             #=========================Obtiene información basica volumen y relaciónes==========
-            self.volumen, self.pixdim = info_nibabel(self.filename)
+            self.volumen, self.pixdim, self.affine = info_nibabel(self.filename)
             
             #print(self.volumen.shape)
             #self.volumen = self.volumen.T

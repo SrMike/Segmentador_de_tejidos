@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>987</width>
+    <width>995</width>
     <height>781</height>
    </rect>
   </property>
@@ -70,6 +70,13 @@
         <property name="enabled">
          <bool>true</bool>
         </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QScrollBar" name="finalScrollBar">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -707,14 +714,43 @@
         <widget class="QProgressBar" name="progressBar">
          <property name="geometry">
           <rect>
-           <x>0</x>
-           <y>110</y>
-           <width>271</width>
-           <height>23</height>
+           <x>10</x>
+           <y>82</y>
+           <width>261</width>
+           <height>51</height>
           </rect>
+         </property>
+         <property name="maximum">
+          <number>258</number>
          </property>
          <property name="value">
           <number>0</number>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_12">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>47</width>
+           <height>13</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Shape: </string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="labelShapesalida">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>20</y>
+           <width>201</width>
+           <height>16</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string/>
          </property>
         </widget>
        </widget>
@@ -728,7 +764,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>987</width>
+     <width>995</width>
      <height>21</height>
     </rect>
    </property>

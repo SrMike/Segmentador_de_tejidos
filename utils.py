@@ -23,11 +23,14 @@ from tqdm import tqdm, notebook
 def kernel(model_obj, data_obj, bar):
   r = np.zeros_like(data_obj.datos)
   bar.setMaximum(data_obj.__len__()-1)
-  for i in tqdm(range(data_obj.__len__())):
+  for i in tqdm(range(1, data_obj.__len__()-1)):
     bar.setValue(i)
     r[:,:,i] = model_obj(data_obj.getitem(i)).detach().numpy()[0,0,:,:]
     #print(i)
   return r
+def salvar_resultados(array, affine, nomb = 'salida'):
+  print(array.shape)
+  nib.save(nib.Nifti1Image(array, affine), nomb+'.nii')
 #=====================utils gui ================================================================
 
 
@@ -60,9 +63,10 @@ def info_nibabel(path):
     info  = nib.load(path)
     volumen = info.get_fdata()
     pixel_spacing = info.header['pixdim'][1:4]
+    affine = info.affine
     volumen = volumen + abs(volumen.min())
     volumen = volumen / volumen.max()
-    return volumen, pixel_spacing 
+    return volumen, pixel_spacing, affine
 
 
 class pasiente():

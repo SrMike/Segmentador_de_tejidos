@@ -176,7 +176,15 @@ class datas(Dataset):
     return self.datos[:,:,index]
   def getitem(self,index):
     #print("tamaño: ", self.datos.shape)
-    return torch.from_numpy(self.datos[:,:,index]).float().unsqueeze_(0).unsqueeze_(0)
+
+    rf = np.zeros([3,self.datos.shape[0],self.datos.shape[1]])
+    ri = self.datos[:,:,index-1:index+2]
+    rf[0,:,:] = ri[:,:,0]
+    rf[1,:,:] = ri[:,:,1]
+    rf[2,:,:] = ri[:,:,2]
+    
+    r = torch.from_numpy(rf).float().unsqueeze_(0)
+    return r
 
 
 
