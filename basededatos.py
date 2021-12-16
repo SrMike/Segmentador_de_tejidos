@@ -12,6 +12,8 @@ import numpy as np
 import nibabel as nib
 from tqdm import tqdm, notebook
 import torch
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
 #========Clase de entrenamiento para la Red Neuronal============================
 #=Debe actualizarse LITS() si se quire usar de nuevo. ==========================
 #LITS presenta errores al usar 2 archivos ======================================
@@ -166,8 +168,22 @@ class datas_train(Dataset):
 #=Se utiliza en la gui para cargar el self.volumen
 #= recibe 'datos = info_{dicom,nibabel}(/ruta/)[0]'
 #=no contiene mascaras
+T = A.Compose(
+        [
+            A.Resize(height=448, width=448),
+            #A.Rotate(limit=35, p=1.0),
+            #A.HorizontalFlip(p=0.5),
+            #A.VerticalFlip(p=0.1),
+            #A.Normalize(
+            #    mean=[0.0],  # modificar para que sean mas canales de entrada
+            #    std=[1.0],    # modificar para que sean mas canales de entrada
+            #    max_pixel_value=255.0,
+            #),
+            ToTensorV2(),
+        ],
+    )
 class datas(Dataset):
-  def __init__(self,datos):
+  def __init__(self,datos, transform = T):
     self.datos = datos
   def __len__(self):
     return self.datos.shape[2]
@@ -181,14 +197,13 @@ class datas(Dataset):
     rf[1,:,:] = ri[:,:,1]
     rf[2,:,:] = ri[:,:,2]
     r = torch.from_numpy(rf).float().unsqueeze_(0)
-    return r
+    #return r
     if self.transform is not None:
           
-          augmentations = self.transform(image=image, mask=mask)
-          image = augmentations["image"]
-          mask = augmentations["mask"]
-          
-      return image, mask
+          augmentations = self.transform(image = r)#image=image, mask=mask)
+          r = augmentations["image"]
+          #mask = augmentations["mask"]
+    return r
 
 #===============================================================
 class LiTS(Dataset):
